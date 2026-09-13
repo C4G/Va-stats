@@ -1,0 +1,11 @@
+model va_assignments {
+  id              Int       @id @default(autoincrement())
+  batch_id        Int
+  assignment_name String    @db.VarChar(80)
+  assignment_type Int       @db.TinyInt
+  weight          Int       @db.TinyInt
+  student_url     String    @db.VarChar(200)
+  vabatches       vabatches @relation(fields: [batch_id], references: [id], onDelete: Cascade, map: "fk_va_assignments_batch_id")
+
+  @@index([batch_id], map: "fk_va_assignments_batch_id")
+}

@@ -1,0 +1,28 @@
+services:
+  # Disposable MySQL used only by CI and the published-image smoke test.
+  db:
+    image: mysql:8.4
+    cap_add:
+      - SYS_NICE
+    environment:
+      MYSQL_DATABASE: ci
+      MYSQL_USER: ci
+      MYSQL_PASSWORD: ci
+      MYSQL_ROOT_PASSWORD: root
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uci -pci --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  va-stats-app:
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ci
+      MYSQL_USER: ci
+      MYSQL_PASSWORD: ci
+    depends_on:
+      db:
+        condition: service_healthy

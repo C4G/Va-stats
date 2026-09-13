@@ -1,0 +1,7 @@
+model vacourses {
+  id            Int                     @id @default(autoincrement()) @db.SmallInt
+  course        String                  @db.Text
+  description   String?                 @db.Text
+  duration      String                  @db.Text
+  duration_type vacourses_duration_type
+}

@@ -53,8 +53,8 @@ jobs:
       - name: Smoke test the published image
         env:
           IMAGE_TAG: ${{ github.sha }}
-          # External database; /api/health is DB-independent, so this checks the
-          # published image boots and serves, not that it can reach MySQL.
+          # The CI Compose overlay supplies a disposable MySQL service, so the
+          # smoke test exercises migrations as well as the published image.
           MYSQL_HOST: localhost
           MYSQL_DATABASE: smoke
           MYSQL_USER: smoke
@@ -64,7 +64,7 @@ jobs:
           GOOGLE_CLIENT_ID: ""
           GOOGLE_CLIENT_SECRET: ""
         run: |
-          docker compose -f docker-compose.yml -p smoke up -d --pull always
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml -p smoke up -d --pull always
 
           app=$(docker compose -p smoke ps -q --all va-stats-app)
 
@@ -81,12 +81,18 @@ jobs:
             exit 1
           fi
 
+          docker compose -p smoke logs va-stats-app | grep -q "Migrations applied" || {
+            echo "::error::published image did not apply Prisma migrations"
+            docker compose -p smoke logs va-stats-app
+            exit 1
+          }
+
           docker exec "$app" wget -qO- http://localhost:3000/api/health
-          echo "OK — pulled image served"
+          echo "OK — pulled image migrated and served"
 
       - name: Stop smoke test stack
         if: always()
-        run: docker compose -f docker-compose.yml -p smoke down --volumes --remove-orphans || true
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml -p smoke down --volumes --remove-orphans || true
 
       - name: Summary
         run: |

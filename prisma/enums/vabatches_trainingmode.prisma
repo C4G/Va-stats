@@ -1,0 +1,5 @@
+enum vabatches_trainingmode {
+  VIRTUAL
+  IN_PERSON  @map("IN-PERSON")
+  SELF_PACED @map("SELF-PACED")
+}

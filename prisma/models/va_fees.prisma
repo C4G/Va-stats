@@ -1,0 +1,15 @@
+model va_fees {
+  id            Int         @id @default(autoincrement())
+  batch_id      Int
+  student_id    Int?
+  fee_paid      String      @default("NA") @db.VarChar(35)
+  amount_1      Int
+  amount_2      Int
+  amount_3      Int
+  nature_of_fee String      @db.VarChar(35)
+  vabatches     vabatches   @relation(fields: [batch_id], references: [id], onDelete: Cascade, map: "fk_va_fees_batch_id")
+  vastudents    vastudents? @relation(fields: [student_id], references: [id], onDelete: Cascade, map: "fk_va_fees_student_id")
+
+  @@index([batch_id], map: "fk_va_fees_batch_id")
+  @@index([student_id], map: "fk_va_fees_student_id")
+}

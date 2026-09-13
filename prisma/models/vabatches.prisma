@@ -1,0 +1,23 @@
+model vabatches {
+  id                 Int                    @id @default(autoincrement())
+  coursename         String                 @db.VarChar(50)
+  batch              String                 @db.VarChar(15)
+  coursestart        String                 @db.VarChar(50)
+  courseend          String                 @db.VarChar(50)
+  coursedays         String                 @db.VarChar(20)
+  coursetimes        String                 @db.VarChar(50)
+  instructor         String                 @db.VarChar(50)
+  PM                 String                 @db.VarChar(50)
+  TA                 String                 @db.VarChar(50)
+  dataentry          String                 @db.VarChar(50)
+  cost               Int?
+  currency           vabatches_currency?
+  strength           Int
+  trainingmode       vabatches_trainingmode
+  status             vabatches_status
+  va_assignments     va_assignments[]
+  va_attendance      va_attendance[]
+  va_fees            va_fees[]
+  va_grades          va_grades[]
+  vastudent_to_batch vastudent_to_batch[]
+}

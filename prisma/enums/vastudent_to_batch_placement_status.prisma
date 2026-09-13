@@ -1,0 +1,6 @@
+enum vastudent_to_batch_placement_status {
+  No_Change               @map("No Change")
+  During_Training         @map("During Training")
+  After_Training          @map("After Training")
+  Supported_by_Vision_Aid @map("Supported by Vision Aid")
+}

@@ -1,0 +1,10 @@
+enum vastudents_enrollment_status {
+  ENROLLED
+  NO_RESPONSE_SW_OFF
+  FOLLOW_UP
+  WRONG_NUMBER
+  DROPOUT
+  PROSPECT
+  COUNSELLED_BY_PM
+  AVAILABLE
+}

@@ -1,0 +1,5 @@
+enum vabatches_status {
+  UNSTARTED
+  ONGOING
+  COMPLETE
+}

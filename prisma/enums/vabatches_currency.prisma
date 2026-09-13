@@ -1,0 +1,5 @@
+enum vabatches_currency {
+  INR
+  USD
+  NA
+}
