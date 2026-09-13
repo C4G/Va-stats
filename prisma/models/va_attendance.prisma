@@ -1,0 +1,12 @@
+model va_attendance {
+  id         Int         @id @default(autoincrement())
+  batch_id   Int
+  student_id Int?
+  date       DateTime    @db.Date
+  is_present Int         @default(100) @db.TinyInt
+  vabatches  vabatches   @relation(fields: [batch_id], references: [id], onDelete: Cascade, map: "fk_va_attendance_batch_id")
+  vastudents vastudents? @relation(fields: [student_id], references: [id], onDelete: Cascade, map: "fk_va_attendance_student_id")
+
+  @@index([batch_id], map: "fk_va_attendance_batch_id")
+  @@index([student_id], map: "fk_va_attendance_student_id")
+}

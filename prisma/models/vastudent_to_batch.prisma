@@ -1,0 +1,20 @@
+model vastudent_to_batch {
+  id                        Int                                  @id @default(autoincrement()) @db.SmallInt
+  student_id                Int?
+  batch_id                  Int?
+  grade                     String?                              @db.VarChar(55)
+  attendance                String?                              @db.VarChar(55)
+  completion_status         String?                              @db.VarChar(255)
+  certification_eligibility String?                              @db.VarChar(255)
+  reason_for_status         String?                              @db.VarChar(255)
+  next_program              String?                              @db.VarChar(255)
+  counseling_status         YesNo?                               @default(No)
+  placement_status          vastudent_to_batch_placement_status? @default(No_Change)
+  placement_remarks         String?                              @db.Text
+  va_remarks                va_remarks[]
+  vabatches                 vabatches?                           @relation(fields: [batch_id], references: [id], onDelete: Cascade, map: "fk_vastudent_to_batch_batch_id")
+  vastudents                vastudents?                          @relation(fields: [student_id], references: [id], onDelete: Cascade, map: "fk_vastudent_to_batch_student_id")
+
+  @@index([batch_id], map: "fk_vastudent_to_batch_batch_id")
+  @@index([student_id], map: "fk_vastudent_to_batch_student_id")
+}

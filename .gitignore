@@ -7,6 +7,10 @@
 !data/.gitkeep
 !sql/
 !/sql/*.sql
+
+# Prisma migrations are source-controlled SQL, unlike ad hoc SQL scripts.
+!prisma/migrations/
+!prisma/migrations/**/*.sql
 # dependencies
 /node_modules
 /.pnp

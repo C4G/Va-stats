@@ -1,0 +1,15 @@
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model telecaller_remarks {
+  id         Int         @id @default(autoincrement())
+  student_id Int?
+  user_id    Int
+  remark     String      @db.Text
+  created_at DateTime?   @default(now()) @db.Timestamp(0)
+  updated_at DateTime?   @default(now()) @db.Timestamp(0)
+  vastudents vastudents? @relation(fields: [student_id], references: [id], onDelete: Cascade, map: "fk_telecaller_remarks_student_id")
+  vausers    vausers     @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_telecaller_remarks_user_id")
+
+  @@index([created_at], map: "idx_created_at")
+  @@index([student_id], map: "idx_student_id")
+  @@index([user_id], map: "idx_user_id")
+}

@@ -1,0 +1,26 @@
+model vausers {
+  id                       Int                  @id @default(autoincrement())
+  employeeId               String?              @unique(map: "employee_number") @db.VarChar(50)
+  email                    String               @unique(map: "email") @db.VarChar(50)
+  name                     String               @db.VarChar(255)
+  designation              String               @db.VarChar(35)
+  joindate                 DateTime?            @db.Date
+  mobilenumber             String?              @db.VarChar(20)
+  workbase                 String               @db.VarChar(35)
+  supervisor               String               @db.VarChar(35)
+  natureofjob              String               @db.VarChar(35)
+  visualacuity             String?              @db.VarChar(50)
+  role                     String               @db.VarChar(35)
+  isactive                 vausers_isactive     @default(A)
+  action                   String               @db.VarChar(35)
+  gender                   String?              @db.VarChar(20)
+  date_of_birth            DateTime?            @db.Date
+  contract_duration_months Int?
+  program_project          String?              @db.VarChar(255)
+  lastlogin                DateTime?            @default(now()) @db.DateTime(0)
+  trainingprogram1         String?              @default("") @db.VarChar(255)
+  trainingprogram2         String?              @default("") @db.VarChar(255)
+  trainingprogram3         String?              @default("") @db.VarChar(255)
+  telecaller_remarks       telecaller_remarks[]
+  va_remarks               va_remarks[]
+}

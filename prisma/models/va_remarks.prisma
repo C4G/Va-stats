@@ -1,0 +1,11 @@
+model va_remarks {
+  id                    Int                @id @default(autoincrement()) @db.SmallInt
+  vastudent_to_batch_id Int                @db.SmallInt
+  remarks               String             @db.VarChar(250)
+  user_id               Int
+  vastudent_to_batch    vastudent_to_batch @relation(fields: [vastudent_to_batch_id], references: [id], onDelete: Cascade, map: "fk_va_remarks_vastudent_to_batch_id")
+  vausers               vausers            @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "va_remarks_ibfk_2")
+
+  @@index([user_id], map: "user_id")
+  @@index([vastudent_to_batch_id], map: "vastudent_to_batch_id")
+}

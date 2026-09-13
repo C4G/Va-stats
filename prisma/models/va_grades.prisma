@@ -1,0 +1,15 @@
+model va_grades {
+  id                Int         @id @default(autoincrement())
+  student_id        Int?
+  batch_id          Int
+  assignment_name   String      @db.VarChar(50)
+  assignment_type   String      @db.VarChar(35)
+  assignment_weight Int
+  grade             Int
+  max_marks         Int
+  vabatches         vabatches   @relation(fields: [batch_id], references: [id], onDelete: Cascade, map: "fk_va_grades_batch_id")
+  vastudents        vastudents? @relation(fields: [student_id], references: [id], onDelete: Cascade, map: "fk_va_grades_student_id")
+
+  @@index([batch_id], map: "fk_va_grades_batch_id")
+  @@index([student_id], map: "fk_va_grades_student_id")
+}

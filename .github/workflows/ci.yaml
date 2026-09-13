@@ -24,9 +24,9 @@ jobs:
           node-version: "24"
 
       - name: Install pnpm
-        run: |
-          npm install -g pnpm@latest
-          pnpm --version
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -46,9 +46,9 @@ jobs:
       - name: Build production image and verify it boots
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          # The database is external; CI only verifies the app builds and the
-          # (DB-independent) health endpoint responds. Dummy values keep
-          # NextAuth and the MySQL client from erroring at startup.
+          # The CI Compose overlay supplies a disposable MySQL service and
+          # overrides these values. Dummy auth values keep the app from
+          # erroring at startup.
           NEXTAUTH_SECRET: ci-dummy-secret
           JWT_SECRET: ci-dummy-secret
           MYSQL_HOST: localhost
@@ -57,7 +57,7 @@ jobs:
           MYSQL_PASSWORD: ci
         run: |
           # Build overlay, so the PR runs an image built from this branch.
-          docker compose -f ./docker-compose.yml -f ./docker-compose.build.yml -p "va-stats-pr-${PR_NUMBER}" up --build -d
+          docker compose -f ./docker-compose.yml -f ./docker-compose.ci.yml -f ./docker-compose.build.yml -p "va-stats-pr-${PR_NUMBER}" up --build -d
 
           echo "Waiting for the app to become healthy..."
           for i in {1..60}; do
@@ -76,11 +76,21 @@ jobs:
             sleep 2
           done
 
+          docker compose -p "va-stats-pr-${PR_NUMBER}" logs va-stats-app | grep -q "Migrations applied" || {
+            echo "Migrations did not complete"
+            docker compose -p "va-stats-pr-${PR_NUMBER}" logs va-stats-app
+            exit 1
+          }
+
       - name: Clean up
         if: always()
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          docker compose -p "va-stats-pr-${PR_NUMBER}" -f ./docker-compose.yml down --volumes --remove-orphans || true
+          docker compose -p "va-stats-pr-${PR_NUMBER}" \
+            -f ./docker-compose.yml \
+            -f ./docker-compose.ci.yml \
+            -f ./docker-compose.build.yml \
+            down --volumes --remove-orphans || true
           docker ps -a --filter "name=va-stats-pr-${PR_NUMBER}" -q | xargs -r docker rm -f || true
           docker network ls --filter "name=va-stats-pr-${PR_NUMBER}" -q | xargs -r docker network rm || true

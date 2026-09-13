@@ -1,0 +1,56 @@
+model vastudents {
+  id                         Int                           @id @unique(map: "id") @default(autoincrement())
+  Quarter                    Int?
+  SNo                        Int?
+  Batch_ID                   String?                       @db.VarChar(55)
+  Program_Name               String?                       @db.VarChar(55)
+  Trainee_ID                 String?                       @db.VarChar(55)
+  name                       String?                       @db.VarChar(35)
+  edu_qualifications         String?                       @db.VarChar(300)
+  phone_number               BigInt?
+  alt_ph_num                 BigInt?
+  CityDistrict_State         String?                       @db.VarChar(55)
+  email                      String?                       @db.VarChar(35)
+  gender                     String?                       @db.VarChar(30)
+  age                        DateTime?                     @db.Date
+  visual_acuity              String?                       @db.VarChar(50)
+  percent_loss               Int?
+  employment_status          String?                       @db.VarChar(50)
+  Designation                String?                       @db.VarChar(55)
+  Languages_Known            String?                       @db.VarChar(55)
+  Program_ManagerCoordinator String?                       @db.VarChar(55)
+  country                    String?                       @db.VarChar(55)
+  state                      String?                       @db.VarChar(50)
+  city                       String?                       @db.VarChar(50)
+  disability                 String                        @db.VarChar(50)
+  edu_details                String                        @db.VarChar(50)
+  objectives                 String?                       @db.VarChar(300)
+  first_choice               String?                       @db.VarChar(50)
+  second_choice              String?                       @db.VarChar(50)
+  third_choice               String?                       @db.VarChar(50)
+  first_recommendation       String?                       @db.VarChar(55)
+  second_recommendation      String?                       @db.VarChar(55)
+  third_recommendation       String?                       @db.VarChar(55)
+  impairment_history         String?                       @db.VarChar(300)
+  source                     String?                       @db.VarChar(80)
+  registration_date          DateTime?                     @db.Date
+  id_proof                   YesNo                         @default(Yes)
+  disability_cert            YesNo                         @default(Yes)
+  photo                      YesNo                         @default(Yes)
+  bank_details               YesNo                         @default(No)
+  completion_status          String?                       @db.Text
+  reason_for_status          String?                       @db.VarChar(150)
+  certification_eligibility  String?                       @db.Text
+  risk_factor                vastudents_risk_factor?
+  remarks                    String?                       @db.VarChar(250)
+  commenter                  String?                       @db.VarChar(55)
+  last_edited                DateTime?                     @default(now()) @db.DateTime(0)
+  enrollment_status          vastudents_enrollment_status?
+  telecaller_remarks         telecaller_remarks[]
+  va_attendance              va_attendance[]
+  va_fees                    va_fees[]
+  va_grades                  va_grades[]
+  vastudent_to_batch         vastudent_to_batch[]
+
+  @@unique([gender, phone_number, age], map: "unique_gender_phone_age")
+}

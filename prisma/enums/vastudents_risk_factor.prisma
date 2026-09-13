@@ -1,0 +1,5 @@
+enum vastudents_risk_factor {
+  EMPTY_ENUM_VALUE @map("")
+  Medium
+  High
+}
